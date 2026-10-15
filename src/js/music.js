@@ -15,6 +15,5 @@ theChuck.runCode(`
         Std.mtof(60 + Std.rand2(0, 3) * 12  +  hi[Std.rand2(0, hi.cap()-1)]) => foo.freq;
         180::ms => now;
     }
-    // 60是C4
-    // Std.rand2(0, 3) * 12 高八度*3
+    
 `);
