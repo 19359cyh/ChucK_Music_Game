@@ -1,0 +1,38 @@
+{
+  "noteDatabase": {
+    "do": 0,
+    "do#": 1,
+    "re": 2,
+    "re#": 3,
+    "mi": 4,
+    "fa": 5,
+    "fa#": 6,
+    "sol": 7,
+    "sol#": 8,
+    "la": 9,
+    "la#": 10,
+    "ti": 11
+  },
+  "durations": {
+    "Q": 1,
+    "E": 0.5,
+    "H": 2
+  },
+  "songs": {
+    "1": {
+      "ck": "test.ck",
+      "bpm": 80,
+      "loopBeats": 30,
+      "sound": {
+        "right": "setViolin",
+        "left": "setKick",
+        "drum": "setDrum"
+      },
+      "pan": {
+        "right": 0.75,
+        "left": 0.25,
+        "drum": 0.5
+      }
+    }
+  }
+}

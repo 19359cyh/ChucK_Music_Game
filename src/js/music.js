@@ -1,19 +1,77 @@
 import { Chuck } from 'webchuck'
+import songDatabase from '../json/songs.json'
+import adsrCode from '../chuck/adsr.ck?raw'
+import playerCode from '../chuck/test.ck?raw'
 
-// Create the default ChucK object
-const theChuck = await Chuck.init([]);
+const theChuck = await Chuck.init([])
+let codeNumber = 0
 
-// Run ChucK code
-theChuck.runCode(`
-    SinOsc foo => NRev r => dac; //建立正弦波振盪器，產生純音。把正弦波接到混響效果器 NRev。把混響後的聲音輸出到電腦音效卡。
-    .4 => foo.gain; //音量
-    .1 => r.mix;   //混音比例
-    [0, 1, 4, 5, 7] @=> int hi[]; //[0, 2, 4, 5, 7, 9]Do, Re, Mi, Fa, Sol, La
+const ckFiles = {
+  'test.ck': playerCode,
+}
 
-    while(true)
-    {
-        Std.mtof(60 + Std.rand2(0, 3) * 12  +  hi[Std.rand2(0, hi.cap()-1)]) => foo.freq;
-        180::ms => now;
-    }
-    
-`);
+function createSongCode(song) {
+  const code = ckFiles[song.ck]
+
+  if (!code) {
+    throw new Error(`找不到 ChucK 檔案：${song.ck}`)
+  }
+
+  if (!song.sound?.right || !song.sound?.left || !song.sound?.drum) {
+    throw new Error(`歌曲 ${song.ck} 缺少 sound 設定`)
+  }
+
+  const pan = song.pan
+  if (
+    !pan ||
+    !['right', 'left', 'drum'].every(
+      (channel) => Number.isFinite(pan[channel]) && pan[channel] >= 0 && pan[channel] <= 1,
+    )
+  ) {
+    throw new Error(`歌曲 ${song.ck} 的 pan 設定必須是 0 到 1 之間的數字`)
+  }
+
+  const classId = `${Date.now()}_${codeNumber++}`
+  const codeWithSound = `${adsrCode}
+
+${code}`
+    .replace(/\bViolin\b/g, `Violin_${classId}`)
+    .replace(/\bBass\b/g, `Bass_${classId}`)
+    .replace(/\bDrum\b/g, `Drum_${classId}`)
+    .replace('__BPM__', String(song.bpm))
+    .replace('__E_BEATS__', songDatabase.durations.E)
+    .replace('__H_BEATS__', songDatabase.durations.H)
+    .replace('__LOOP_BEATS__', String(song.loopBeats))
+    .replace('__RIGHT_SOUND__', song.sound.right)
+    .replace('__LEFT_SOUND__', song.sound.left)
+    .replace('__DRUM_SOUND__', song.sound.drum)
+    .replace('__RIGHT_PAN__', String(pan.right))
+    .replace('__LEFT_PAN__', String(pan.left))
+    .replace('__DRUM_PAN__', String(pan.drum))
+
+  if (codeWithSound.includes('__')) {
+    throw new Error('ChucK 程式還有未替換的設定標記')
+  }
+
+  return codeWithSound
+}
+
+export function playSong(songNumber) {
+  const song = songDatabase.songs[String(songNumber)]
+
+  if (!song) {
+    throw new Error(`找不到第 ${songNumber} 首歌`)
+  }
+
+  const result = theChuck.runCode(createSongCode(song))
+
+  if (result?.catch) {
+    result.catch((error) => {
+      console.error('ChucK 播放失敗：', error)
+    })
+  }
+
+  return result
+}
+
+void playSong(1)
