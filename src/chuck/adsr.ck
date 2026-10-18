@@ -33,18 +33,12 @@ public class Violin extends Chugraph{
 public class Bass extends Chugraph
 {
     SinOsc osc => ADSR env => LPF filter => outlet;
-
+\
     fun void setBass()
     {
-        (0.01::second, 0.1::second, 1.0, 0.1::second) => env.set;
-        500 => filter.freq;
-    }
-
-    fun void setKick()
-    {
-        (0.001::second, 0.08::second, 0.0, 0.08::second) => env.set;
-        800 => filter.freq;
-        2.0 => osc.gain;
+        (0.02::second, 0.1::second, 0.7, 0.15::second) => env.set;
+        200 => filter.freq;
+        1.5 => osc.gain;
     }
 
     fun void freq(float f)

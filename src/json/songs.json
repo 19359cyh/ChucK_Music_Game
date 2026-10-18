@@ -25,7 +25,7 @@
       "loopBeats": 30,
       "sound": {
         "right": "setViolin",
-        "left": "setKick",
+        "left": "setBass",
         "drum": "setDrum"
       },
       "pan": {
