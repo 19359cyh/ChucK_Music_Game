@@ -21,7 +21,7 @@
   "songs": {
     "1": {
       "ck": "test.ck",
-      "bpm": 80,
+      "bpm": 120,
       "loopBeats": 30,
       "sound": {
         "right": "setViolin",

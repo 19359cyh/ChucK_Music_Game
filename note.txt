@@ -1,0 +1,43 @@
+## 資訊科學與數位生活Information Science and Digital Life
+### 網頁遊戲
+
+dac是音效卡
+=>            //輸出
+=<            //拔掉
+44100
+
+
+
+60是C4
+Std.rand2(0, 3) * 12 高八度*3
+hi[Std.rand2(0, hi.cap()-1)] 隨機選擇音階
+180::ms => now; 每180毫秒產生一個音符
+
+sinOse 正弦
+PulseOse 方波
+SqrOse
+TriOse
+SawOse 鋸齒波
+Noise 白噪音
+Impulse 脈衝波
+Step 一次到頂
+
+adc：收音的麥克風
+Gain：擴大機
+Pan2：調參數會偏左右（音場）
+ADSR：無聲到有聲、聲音持續多久、跟原振幅比值、聲音慢慢消失過程時間（四個值）
+
+PitShift：調變頻率
+delay可以做回音
+NRev：回聲
+
+### if 有 sample
+（記得放對路徑）
+（只能放wav）
+
+me.dir：本檔案
+mySound.read：讀入
+mySound.pos：從音檔哪開始放
+mySound.rate：速度
+mySound.Sample() => int numSamples; 抓樣本數
+numSamples -1 => mySound.pos：倒放

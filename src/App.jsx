@@ -74,7 +74,7 @@ function App() {
     <main className="camera-stage">
       <video ref={videoRef} autoPlay muted playsInline aria-hidden="true" />
       <canvas ref={ballsRef} aria-hidden="true" />
-      <canvas ref={canvasRef} aria-label="魚眼線條攝影機畫面" />
+      <canvas ref={canvasRef} aria-label="魚眼畫面" />
       {cameraError && <p role="alert">{cameraError}</p>}
     </main>
   )

@@ -14,11 +14,11 @@ function createSongCode(song) {
   const code = ckFiles[song.ck]
 
   if (!code) {
-    throw new Error(`找不到 ChucK 檔案：${song.ck}`)
+    throw new Error(`找不到CK：${song.ck}`)
   }
 
   if (!song.sound?.right || !song.sound?.left || !song.sound?.drum) {
-    throw new Error(`歌曲 ${song.ck} 缺少 sound 設定`)
+    throw new Error(`歌曲 ${song.ck} 缺sound設定`)
   }
 
   const pan = song.pan
@@ -28,7 +28,7 @@ function createSongCode(song) {
       (channel) => Number.isFinite(pan[channel]) && pan[channel] >= 0 && pan[channel] <= 1,
     )
   ) {
-    throw new Error(`歌曲 ${song.ck} 的 pan 設定必須是 0 到 1 之間的數字`)
+    throw new Error(`歌曲 ${song.ck} pan設定問題`)
   }
 
   const classId = `${Date.now()}_${codeNumber++}`
@@ -50,7 +50,7 @@ ${code}`
     .replace('__DRUM_PAN__', String(pan.drum))
 
   if (codeWithSound.includes('__')) {
-    throw new Error('ChucK 程式還有未替換的設定標記')
+    throw new Error('ChucK 程式還有未替換的設定')
   }
 
   return codeWithSound
