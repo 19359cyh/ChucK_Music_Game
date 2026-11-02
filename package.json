@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "deploy": "npm run build && npx gh-pages -d dist",
+    "deploy": "npm run build && npx gh-pages -d dist -r https://github.com/19359cyh/ChucK_Music_Game.git",
     "lint": "oxlint",
     "preview": "vite preview"
   },
