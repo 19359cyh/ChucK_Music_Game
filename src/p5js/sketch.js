@@ -96,7 +96,7 @@ export function createSketch(container, videoElement) {
       //setBallPosition(balls[0], p.mouseX, p.mouseY)
       balls[0].updateBall(p.mouseX, p.mouseY, balls[0].r)
       balls[0].drawBall()
-      p.text(p.mouseX +", " + p.mouseY, 10, 20)
+      //p.text(p.mouseX +", " + p.mouseY, 10, 20)
       for(let i = 1; i < balls.length; i++) {
         balls[i].updaterandomBall()
       }
