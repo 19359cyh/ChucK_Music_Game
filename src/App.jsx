@@ -3,15 +3,18 @@ import './App.css'
 import './js/music.js'
 import { draw } from './js/cameraEffect.js'
 import { startBalls } from './js/balls.js'
+import { createSketch } from './p5js/sketch.js'
 
 function App() {
   const videoRef = useRef(null)
   const ballsRef = useRef(null)
   const canvasRef = useRef(null)
+  const sketchRef = useRef(null)
   const [cameraError, setCameraError] = useState('')
 
   useEffect(() => {
     const stopBalls = startBalls(ballsRef.current)
+    let sketch
     let stream
     let animationFrame
     let sourceCanvas
@@ -30,6 +33,7 @@ function App() {
           await videoRef.current.play()
 
           const video = videoRef.current
+          sketch = createSketch(sketchRef.current, video)
           const canvas = canvasRef.current
           const width = Math.min(video.videoWidth, 960)
           const height = Math.round(width * video.videoHeight / video.videoWidth)
@@ -65,6 +69,7 @@ function App() {
 
     return () => {
       stopBalls()
+      sketch?.remove()
       cancelAnimationFrame(animationFrame)
       stream?.getTracks().forEach((track) => track.stop())
     }
@@ -75,6 +80,7 @@ function App() {
       <video ref={videoRef} autoPlay muted playsInline aria-hidden="true" />
       <canvas ref={ballsRef} aria-hidden="true" />
       <canvas ref={canvasRef} aria-label="魚眼畫面" />
+      <div ref={sketchRef} className="p5-layer" aria-hidden="true" />
       {cameraError && <p role="alert">{cameraError}</p>}
     </main>
   )

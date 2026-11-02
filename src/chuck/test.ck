@@ -1,4 +1,10 @@
 __BPM__.0 => float bpm;
+global float __FILTER_FREQ__;
+global float __PITCH_MULTIPLIER__;
+
+2000.0 => __FILTER_FREQ__;
+1.0 => __PITCH_MULTIPLIER__;
+
 60.0 / bpm => float quarterNote;
 quarterNote :: second => dur Q;
 quarterNote * __E_BEATS__ :: second => dur E;
@@ -54,7 +60,8 @@ fun void playRightHand()
         }
         else
         {
-            Std.mtof(rhNotes[i]) => rh.freq;
+            Std.mtof(rhNotes[i]) * __PITCH_MULTIPLIER__ => rh.freq;
+            __FILTER_FREQ__ => rh.filterFreq;
             rh.noteOn(0.2);
             rhDurs[i] * 0.8 => now;
             rh.noteOff(0.2);
@@ -79,7 +86,8 @@ fun void playLeftHand()
         else
         {
             lh.setGain(0.4);
-            lh.freq(Std.mtof(lhNotes[i]));
+            lh.freq(Std.mtof(lhNotes[i]) * __PITCH_MULTIPLIER__);
+            __FILTER_FREQ__ => lh.filterFreq;
             lhDurs[i] * 0.8 => now;
             lh.setGain(0.0);
             lhDurs[i] * 0.2 => now;

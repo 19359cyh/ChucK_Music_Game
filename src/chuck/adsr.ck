@@ -16,7 +16,10 @@ public class Violin extends Chugraph{
     fun void freq(float f)
     {
         f => viol.freq;
-        f => filt.freq; 
+    }
+    fun void filterFreq(float f)
+    {
+        f => filt.freq;
     }    
     fun void noteOn(float g)
     {
@@ -44,6 +47,11 @@ public class Bass extends Chugraph
     fun void freq(float f)
     {
         f => osc.freq;
+    }
+
+    fun void filterFreq(float f)
+    {
+        f => filter.freq;
     }
 
     fun void setGain(float value)
