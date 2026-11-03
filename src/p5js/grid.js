@@ -17,7 +17,8 @@ export class Grid {
     }
   }
 
-  updateGrid(B, n) {
+  updateGrid(B, n, gridsize) {
+    this.size = gridsize;
     for (let i = 0; i < this.cols + 1; i++) {
       for (let j = 0; j < this.rows + 1; j++) {
         let val = 0;

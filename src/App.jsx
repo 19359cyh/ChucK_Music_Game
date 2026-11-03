@@ -20,6 +20,7 @@ function App() {
     let sourceCanvas
     let sourceContext
     let outputContext
+    
 
     const startCamera = async () => {
       try {
@@ -54,6 +55,7 @@ function App() {
             if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
               draw(video, sourceContext, outputContext, width, height)
             }
+            
             animationFrame = requestAnimationFrame(render)
           }
 

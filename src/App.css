@@ -4,7 +4,7 @@
   height: 100svh;
   min-height: 100vh;
   overflow: hidden;
-  background: #ffc6a5;
+  background: rgb(0, 0, 0);
 }
 
 .camera-stage canvas {
@@ -14,7 +14,7 @@
   height: 100%;
   display: block;
   object-fit: cover;
-  background: #ffc6a5;
+  background: rgb(0,0,0);
 }
 
 .camera-stage canvas:first-of-type {
@@ -50,7 +50,7 @@
   max-width: min(90vw, 480px);
   padding: 1rem 1.25rem;
   color: rgb(255, 255, 255);
-  background: #ffc6a5;
+  background: rgb(0, 0, 0);
   border-radius: 0.75rem;
   transform: translate(-50%, -50%);
 }

@@ -18,6 +18,8 @@ export function createSketch(container, videoElement) {
     let hands = []
     let trackingStarted = false
     let noHandsWarningShown = false
+    let gridsize = 10;
+    let bgcolor =  p.map(p.constrain(p.mouseY / p.height, 0, 1), 0, 1, 255, 0)
 
     const setBallPosition = (ball, x, y) => {
       if (x == null || y == null) return
@@ -38,7 +40,7 @@ export function createSketch(container, videoElement) {
     p.setup = async () => {
       p.createCanvas(container.clientWidth, container.clientHeight).parent(container)
       p.colorMode(p.RGB)
-      grids.push(new Grid(p, 10))
+      grids.push(new Grid(p, gridsize))
       balls.push(new Ball(p, 100))
       for (let i = 1; i < 10; i++) {
         balls.push(new Ball(p, 100))
@@ -102,13 +104,17 @@ export function createSketch(container, videoElement) {
       }
 
       for (const grid of grids) {
-        grid.updateGrid(balls, 0)
-        grid.drawShape(0, 255, 255, 1)
+        gridsize =  p.map(horizontalPosition, 0, 1, 10, 100)
+        let c = p.map(verticalPosition, 0, 1, 0, 255)
+        grid.strokeweight = 10
+        grid.updateGrid(balls, 0, gridsize)
+        grid.drawShape(255-c, c, c, 1)
       }
     }
 
     p.windowResized = () => {
       p.resizeCanvas(container.clientWidth, container.clientHeight)
+      bgcolor =  p.map(p.constrain(p.mouseY / p.height, 0, 1), 0, 1, 255, 0)
     }
   })
 }
