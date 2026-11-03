@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import './App.css'
-import './js/music.js'
 import { draw } from './js/cameraEffect.js'
 import { startBalls } from './js/balls.js'
 import { createSketch } from './p5js/sketch.js'
@@ -20,6 +19,17 @@ function App() {
     let sourceCanvas
     let sourceContext
     let outputContext
+    let pointerX = 0
+    let pointerY = 0
+    let lastEffectTime = 0
+    let effectFps = 0
+
+    const updatePointer = (event) => {
+      pointerX = event.clientX
+      pointerY = event.clientY
+    }
+
+    window.addEventListener('pointermove', updatePointer)
     
 
     const startCamera = async () => {
@@ -36,7 +46,7 @@ function App() {
           const video = videoRef.current
           sketch = createSketch(sketchRef.current, video)
           const canvas = canvasRef.current
-          const width = Math.min(video.videoWidth, 960)
+          const width = Math.min(video.videoWidth, 480)
           const height = Math.round(width * video.videoHeight / video.videoWidth)
 
           sourceCanvas = document.createElement('canvas')
@@ -51,15 +61,37 @@ function App() {
           canvas.width = width
           canvas.height = height
 
-          const render = () => {
+          let lastRenderTime = 0
+          const render = (time) => {
             if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
-              draw(video, sourceContext, outputContext, width, height)
+              if (time - lastRenderTime >= 33) {
+                if (lastEffectTime > 0) {
+                  effectFps = 1000 / (time - lastEffectTime)
+                }
+                lastEffectTime = time
+                const horizontalPosition = Math.min(
+                  1,
+                  Math.max(0, pointerX / window.innerWidth),
+                )
+                const verticalPosition = Math.min(
+                  1,
+                  Math.max(0, pointerY / window.innerHeight),
+                )
+                draw(video, sourceContext, outputContext, width, height, {
+                  mouseX: pointerX,
+                  mouseY: pointerY,
+                  filterFrequency: 150 + horizontalPosition * 5850,
+                  pitchMultiplier: 2 ** (1 - verticalPosition * 2),
+                  fps: effectFps,
+                })
+                lastRenderTime = time
+              }
             }
             
             animationFrame = requestAnimationFrame(render)
           }
 
-          render()
+          render(0)
         }
       } catch (error) {
         console.error('攝影機：', error)
@@ -73,6 +105,7 @@ function App() {
       stopBalls()
       sketch?.remove()
       cancelAnimationFrame(animationFrame)
+      window.removeEventListener('pointermove', updatePointer)
       stream?.getTracks().forEach((track) => track.stop())
     }
   }, [])

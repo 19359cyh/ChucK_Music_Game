@@ -63,7 +63,14 @@ fun void playRightHand()
             Std.mtof(rhNotes[i]) * __PITCH_MULTIPLIER__ => rh.freq;
             __FILTER_FREQ__ => rh.filterFreq;
             rh.noteOn(0.2);
-            rhDurs[i] * 0.8 => now;
+            rhDurs[i] * 0.8 => dur noteDur;
+            now + noteDur => time releaseTime;
+            while (now < releaseTime)
+            {
+                Std.mtof(rhNotes[i]) * __PITCH_MULTIPLIER__ => rh.freq;
+                __FILTER_FREQ__ => rh.filterFreq;
+                20::ms => now;
+            }
             rh.noteOff(0.2);
             rhDurs[i] * 0.2 => now;
         }
@@ -88,7 +95,14 @@ fun void playLeftHand()
             lh.setGain(0.4);
             lh.freq(Std.mtof(lhNotes[i]) * __PITCH_MULTIPLIER__);
             __FILTER_FREQ__ => lh.filterFreq;
-            lhDurs[i] * 0.8 => now;
+            lhDurs[i] * 0.8 => dur noteDur;
+            now + noteDur => time releaseTime;
+            while (now < releaseTime)
+            {
+                lh.freq(Std.mtof(lhNotes[i]) * __PITCH_MULTIPLIER__);
+                __FILTER_FREQ__ => lh.filterFreq;
+                20::ms => now;
+            }
             lh.setGain(0.0);
             lhDurs[i] * 0.2 => now;
         }

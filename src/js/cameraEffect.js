@@ -1,12 +1,13 @@
 // 魚眼 + 線條畫面效果
-const FISHEYE_STRENGTH = 0.35
+const FISHEYE_STRENGTH = 0.3
 const EDGE_THRESHOLD = 65
-const EDGE_GAIN = 5
+const EDGE_GAIN = 2
 const LINE_SIZE = 1
 const LINE_COLOR = {
-  red: 255,
-  green: 139,
-  blue: 77,
+  red: 0,
+  green: 239,
+  blue: 0,
+  alpha: 250,
 }
 
 // 球會在這個框外
@@ -26,7 +27,7 @@ export function getFrame(width, height) {
 }
 
 // 魚眼 + 線條效果的入口
-export function draw(video, sourceContext, outputContext, width, height) {
+export function draw(video, sourceContext, outputContext, width, height, info = {}) {
   sourceContext.save()
   sourceContext.scale(-1, 1)
   sourceContext.drawImage(video, -width, 0, width, height)
@@ -38,6 +39,20 @@ export function draw(video, sourceContext, outputContext, width, height) {
 
   edge(fisheye, output, width, height)
   outputContext.putImageData(output, 0, 0)
+  drawInfo(outputContext, info)
+}
+
+function drawInfo(context, info) {
+  context.save()
+  context.fillStyle = `rgb(${LINE_COLOR.red}, ${LINE_COLOR.green}, ${LINE_COLOR.blue})`
+  context.font = '10px monospace'
+  context.fillText(new Date().toLocaleString(), 80, 64)
+  context.fillText(`X: ${Math.round(info.mouseX)}`, 80, 80)
+  context.fillText(`Y: ${Math.round(info.mouseY)}`, 80, 96)
+  context.fillText(`Hz: ${Math.round(info.filterFrequency)}`, 80, 112)
+  context.fillText(`Pitch: ${info.pitchMultiplier.toFixed(2)}x`, 80, 128)
+  context.fillText(`FPS: ${Math.round(info.fps)}`, 80, 144)
+  context.restore()
 }
 
 // 數值越大，魚眼越強
@@ -109,7 +124,7 @@ function edge(image, output, width, height) {
           output.data[outputIndex] = LINE_COLOR.red * power
           output.data[outputIndex + 1] = LINE_COLOR.green * power
           output.data[outputIndex + 2] = LINE_COLOR.blue * power
-          output.data[outputIndex + 3] = 255
+          output.data[outputIndex + 3] = LINE_COLOR.alpha * power
         }
       }
     }

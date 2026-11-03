@@ -1,7 +1,7 @@
 import { getFrame } from './cameraEffect.js'
 
-const COUNT = 13
-const COLORS = ['#80e1d2', '#fffaed']
+const COUNT = 16
+const COLORS = ['#4CAF50', '#fff', '#F44336']
 const BALL_ALPHA = 0.6
 
 // 開始球動畫，回傳停止動畫的方法
